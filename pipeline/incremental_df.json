@@ -1,0 +1,37 @@
+{
+	"name": "incremental_df",
+	"properties": {
+		"activities": [
+			{
+				"name": "incremental_df",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "incremental_df",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine",
+					"continuationSettings": {
+						"customizedCheckpointKey": "37d291fc-9d70-48c3-8cac-1ac5db80f567"
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-10-19T11:33:46Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,33 @@
+{
+	"name": "incrementalsource",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "cudtid",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "custname",
+				"type": "varchar"
+			},
+			{
+				"name": "doi",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "source_cust"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,28 @@
+{
+	"name": "powerquery1",
+	"properties": {
+		"type": "WranglingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "poweremp",
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> poweremp",
+					"dataset": {
+						"referenceName": "poweremp",
+						"type": "DatasetReference"
+					}
+				},
+				{
+					"name": "powerq1",
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> powerq1",
+					"dataset": {
+						"referenceName": "powerq1",
+						"type": "DatasetReference"
+					}
+				}
+			],
+			"script": "section Section1;\r\nshared poweremp = let AdfDoc = AzureStorage.DataLakeContents(\"https://venkatdata8181.dfs.core.windows.net/data/input/new emp.csv\"),Csv = Csv.Document(AdfDoc, [Delimiter = \",\", Encoding = TextEncoding.Utf8, QuoteStyle = QuoteStyle.Csv]), PromotedHeaders = Table.PromoteHeaders(Csv, [PromoteAllScalars = true]),\r\n  #\"Changed column type\" = Table.TransformColumnTypes(PromotedHeaders, {{\"empid\", Int64.Type}, {\"salary\", Int64.Type}, {\"dob\", type date}}) in  #\"Changed column type\";\r\nshared powerq1 = let AdfDoc = AzureStorage.DataLakeContents(\"https://venkatdata8181.dfs.core.windows.net/data/input/dept emp.csv\"),Csv = Csv.Document(AdfDoc, [Delimiter = \",\", Encoding = TextEncoding.Utf8, QuoteStyle = QuoteStyle.Csv]), PromotedHeaders = Table.PromoteHeaders(Csv, [PromoteAllScalars = true]),\r\n  #\"Removed columns\" = Table.RemoveColumns(PromotedHeaders, {\"\", \"_1\"}),\r\n  #\"Changed column type\" = Table.TransformColumnTypes(#\"Removed columns\", {{\"empid\", Int64.Type}, {\"Revenue \", Int64.Type}}) in  #\"Changed column type\";\r\nshared UserQuery = let Source = #\"poweremp\",\r\n  #\"Trimmed text\" = Table.TransformColumns(Source, {{\"ename\", each Text.Trim(_), type nullable text}}),\r\n  #\"Removed duplicates\" = Table.Distinct(#\"Trimmed text\", {\"empid\"}),\r\n  #\"Capitalized each word\" = Table.TransformColumns(#\"Removed duplicates\", {{\"ename\", each Text.Proper(_), type nullable text}, {\"dname\", each Text.Proper(_), type nullable text}, {\"gender\", each Text.Proper(_), type nullable text}, {\"desig\", each Text.Proper(_), type nullable text}}),\r\n  #\"Inserted merged column\" = Table.AddColumn(#\"Capitalized each word\", \"emp-desig\", each Text.Combine({[ename], [desig]}, \"-\"), type text),\r\n  #\"Replaced value\" = Table.ReplaceValue(#\"Inserted merged column\", \"F\", \"Female\", Replacer.ReplaceText, {\"gender\"}),\r\n  #\"Replaced value 1\" = Table.ReplaceValue(#\"Replaced value\", \"M\", \"Male\", Replacer.ReplaceText, {\"gender\"}) in #\"Replaced value 1\";\r\n",
+			"documentLocale": "en-us"
+		}
+	}
+}

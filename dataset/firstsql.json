@@ -1,0 +1,17 @@
+{
+	"name": "firstsql",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "new",
+			"table": "dept"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

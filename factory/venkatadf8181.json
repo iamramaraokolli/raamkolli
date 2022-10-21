@@ -1,0 +1,9 @@
+{
+	"name": "venkatadf8181",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "ef5102f9-45cd-475c-9020-7b39927f2ad1",
+		"tenantId": "f8ae62f8-68b8-4077-b69b-d476ada9d16c"
+	}
+}

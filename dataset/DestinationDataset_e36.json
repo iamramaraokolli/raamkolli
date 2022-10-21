@@ -1,0 +1,17 @@
+{
+	"name": "DestinationDataset_e36",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "",
+			"table": "AzureBlobFSFile"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

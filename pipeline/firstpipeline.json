@@ -1,0 +1,121 @@
+{
+	"name": "firstpipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFileName": {
+								"value": "@pipeline().parameters.testpara",
+								"type": "Expression"
+							},
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": {
+							"value": "@{pipeline().parameters.testpara}",
+							"type": "Expression"
+						},
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "did",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "did",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "dname",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "dname",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Revenue",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "revenue",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "firstcsv",
+						"type": "DatasetReference",
+						"parameters": {
+							"filepara": {
+								"value": "@pipeline().parameters.testpara",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "firstsql",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"parameters": {
+			"testpara": {
+				"type": "string",
+				"defaultValue": "did"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-10-17T12:12:40Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
