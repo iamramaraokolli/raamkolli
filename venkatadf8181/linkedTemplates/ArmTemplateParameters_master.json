@@ -1,0 +1,39 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "venkatadf8181"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"AzureDataLakeStorage2_servicePrincipalCredential": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabase2_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://venkatdata8181.dfs.core.windows.net/"
+		},
+		"AzureDataLakeStorage2_properties_typeProperties_url": {
+			"value": "https://venkatdata8181.dfs.core.windows.net/"
+		},
+		"AzureDataLakeStorage2_properties_typeProperties_tenant": {
+			"value": "f8ae62f8-68b8-4077-b69b-d476ada9d16c"
+		},
+		"AzureDataLakeStorage2_properties_typeProperties_servicePrincipalId": {
+			"value": "4ada7670-7daa-4f73-a8cb-e6f45efe3184"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
