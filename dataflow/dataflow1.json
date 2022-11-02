@@ -48,7 +48,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     skipLines: 2) ~> source1",
+				"     skipLines: 1) ~> source1",
 				"source1 select(mapColumn(",
 				"          Region = {_col0_},",
 				"          Country = {_col1_},",
