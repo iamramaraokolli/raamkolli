@@ -6,14 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "dfdept",
-						"type": "DatasetReference"
-					},
-					"name": "dept"
-				},
-				{
-					"dataset": {
-						"referenceName": "dfemp",
+						"referenceName": "DelimitedText1",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -22,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "sqldbdf1",
+						"referenceName": "AzureSqlTable1",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -30,59 +23,71 @@
 			],
 			"transformations": [
 				{
+					"name": "select1"
+				},
+				{
 					"name": "derivedColumn1"
 				},
 				{
-					"name": "derivedColumn2"
-				},
-				{
-					"name": "join1"
-				},
-				{
-					"name": "select1"
+					"name": "select2"
 				}
 			],
 			"scriptLines": [
 				"source(output(",
-				"          did as integer,",
-				"          dname as string,",
-				"          revenue as integer",
+				"          {_col0_} as string,",
+				"          {_col1_} as string,",
+				"          {_col2_} as string,",
+				"          {_col3_} as string,",
+				"          {_col4_} as string,",
+				"          {_col5_} as double,",
+				"          {_col6_} as string,",
+				"          {_col7_} as double,",
+				"          {_col8_} as string,",
+				"          {_col9_} as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> dept",
-				"source(output(",
-				"          eid as integer,",
-				"          name as string,",
-				"          {salary } as integer,",
-				"          {did } as integer",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
-				"dept derive(dname = initCap(dname),",
-				"          targetrevenue = revenue+(revenue*20/100)) ~> derivedColumn1",
-				"source1 derive(name = initCap(name)) ~> derivedColumn2",
-				"derivedColumn2, dept join({did } == did,",
-				"     joinType:'inner',",
-				"     matchType:'exact',",
-				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join1",
-				"join1 select(mapColumn(",
-				"          eid,",
-				"          ename = name,",
-				"          {salary },",
-				"          dname",
+				"     ignoreNoFilesFound: false,",
+				"     skipLines: 2) ~> source1",
+				"source1 select(mapColumn(",
+				"          Region = {_col0_},",
+				"          Country = {_col1_},",
+				"          ProductCategory = {_col2_},",
+				"          CampaignName = {_col3_},",
+				"          RevenuePart1 = {_col4_},",
+				"          Revenue = {_col5_},",
+				"          RevenueTargetPart1 = {_col6_},",
+				"          RevenueTarget = {_col7_},",
+				"          City = {_col8_},",
+				"          State = {_col9_}",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"select1 derive(Revenue = toDecimal(replace(concat(toString(RevenuePart1), toString(Revenue)), '\\\\', ''), 10, 2, '$###,###.##'),",
+				"          RevenueTarget = toDecimal(replace(concat(toString(RevenueTargetPart1), toString(RevenueTarget)), '\\\\', ''), 10, 2, '$###,###.##')) ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          Region,",
+				"          Country,",
+				"          ProductCategory,",
+				"          CampaignName,",
+				"          Revenue,",
+				"          RevenueTarget,",
+				"          City,",
+				"          State",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
-				"          eid as integer,",
-				"          ename as string,",
-				"          salary as integer,",
-				"          dname as string",
+				"          Region as string,",
+				"          Country as string,",
+				"          ProductCategory as string,",
+				"          CampaignName as string,",
+				"          Revenue as decimal(10,2),",
+				"          RevenueTarget as decimal(10,2),",
+				"          City as string,",
+				"          State as string",
 				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
